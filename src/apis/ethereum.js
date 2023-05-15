@@ -1,8 +1,7 @@
 import React from "react";
 import axios from "axios";
 
-const ethereum = () => {
-  const searchTransactions = async (th) => {
+  export const searchTransactions = async (th) => {
     const response = await axios.get(
       `https://api.blockchair.com/ethereum/dashboards/transaction/${th}`
     );
@@ -10,7 +9,7 @@ const ethereum = () => {
     return response.data.result;
   };
 
-  const searchBlocks = async (bl) => {
+  export const searchBlocks = async (bl) => {
     const response = await axios.get(
       `https://api.blockchair.com/ethereum/dashboards/block/${bl}`
     );
@@ -18,7 +17,7 @@ const ethereum = () => {
     return response.data.result;
   };
 
-  const searchAddress = async (ad) => {
+  export const searchAddress = async (ad) => {
     const response = await axios.get(
       `https://api.blockchair.com/ethereum/dashboards/address/${ad}`
     );
@@ -26,7 +25,7 @@ const ethereum = () => {
     return response.data.result;
   };
 
-  const searchBlockHeight = async () => {
+  export const searchBlockHeight = async () => {
     const response = await axios.get(
       `https://api.blockchair.com/ethereum/stats`
     );
@@ -34,7 +33,7 @@ const ethereum = () => {
     return response.data.data.blocks;
   };
 
-  const getlasttenblocks = async () => {
+  export const getLastTenBlocks = async () => {
     const response = await axios.get(
       `https://api.blockchair.com/ethereum/blocks?limit=10`
     );
@@ -42,7 +41,4 @@ const ethereum = () => {
     return response.data.data;
   };
 
-  return <div>ethereum</div>;
-};
 
-export default ethereum;

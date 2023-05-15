@@ -1,7 +1,19 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
+import {getLastTenBlocks} from '../../apis/ethereum';
 
 const Ethereum = () => {
   const [search, setSearch] = useState("");
+
+  useEffect(()=>{
+    async function fetchTenBlocks()
+    {
+      const res=await getLastTenBlocks();
+      console.log(res);
+    }
+   
+    fetchTenBlocks()
+  }
+  ,[])
   return (
     <div>
       <div class='row'>
@@ -27,7 +39,9 @@ const Ethereum = () => {
             </span>
           </div>
         </div>
+        
       </div>
+       
     </div>
   );
 };
