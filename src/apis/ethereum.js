@@ -26,6 +26,22 @@ const ethereum = () => {
     return response.data.result;
   };
 
+  const searchBlockHeight = async () => {
+    const response = await axios.get(
+      `https://api.blockchair.com/ethereum/stats`
+    );
+    console.log(response.data.data.blocks);
+    return response.data.data.blocks;
+  };
+
+  const getlasttenblocks = async () => {
+    const response = await axios.get(
+      `https://api.blockchair.com/ethereum/blocks?limit=10`
+    );
+    console.log(response.data.data);
+    return response.data.data;
+  };
+
   return <div>ethereum</div>;
 };
 
