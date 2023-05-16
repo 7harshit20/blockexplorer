@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getAddressInfo } from "../../apis/ethereum";
+import { getAddressInfo } from "../../../apis/ethereum";
 import { useParams } from "react-router-dom";
 
 import Box from "@mui/material/Box";

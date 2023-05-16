@@ -3,7 +3,7 @@ import {
   getLastTenBlocks,
   searchBlockHeight,
   getLastTenTransactions,
-} from "../../apis/ethereum";
+} from "../../../apis/ethereum";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
