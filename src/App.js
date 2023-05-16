@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Ethereum from "./components/pages/Ethereum";
 import Bitcoin from "./components/pages/Bitcoin";
 import Home from "./components/pages/Home";
+import BlockDetails from "./components/layout/BlockDetails";
+import TransactionDetails from "./components/layout/TransactionDetails";
 // import Search from "./components/layout/Search";
 
 // import TextField from "@mui/material/TextField";
@@ -15,6 +17,8 @@ const App = () => {
         <Route path='/' element={<Home />} />
         <Route path='/ethereum' element={<Ethereum />} />
         <Route path='/bitcoin' element={<Bitcoin />} />
+        <Route path='/bitcoin/block/:blockId' element={<BlockDetails/>}/>
+        <Route path='/bitcoin/transaction/:transactionId' element={<TransactionDetails/>}/>
         {/* <Route path='/bitcoin' element={<Ethereum />} /> */}
       </Routes>
     </Router>
