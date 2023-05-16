@@ -51,7 +51,15 @@ export const getLastTenTransactions = async () => {
 
 export const getAddressInfo = async (ad) => {
   const response = await axios.get(
-    `https://api.blockchair.com/ethereum/dashboards/address/${ad}?erc_20=true&key=${api_key_ct}`
+    `https://api.blockchair.com/ethereum/dashboards/address/${ad}?erc_20=true&limit=10&key=${api_key_ct}`
+  );
+  console.log(response.data.data);
+  return response.data.data;
+};
+
+export const getBlockInfo = async (bl) => {
+  const response = await axios.get(
+    `https://api.blockchair.com/ethereum/raw/block/${bl}?key=${api_key_ct}`
   );
   console.log(response.data.data);
   return response.data.data;

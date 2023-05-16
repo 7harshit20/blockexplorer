@@ -37,6 +37,7 @@ const Address = () => {
 
   useEffect(() => {
     if (data) {
+      console.log("data", data.calls.length);
       setRows(
         data.calls.map((txs) => {
           return createData(
@@ -116,7 +117,9 @@ const Address = () => {
                     disabled
                     id='filled-adornment-amount'
                     startAdornment={
-                      <InputAdornment position='start'>{`${data.address.balance} eth (${data.address.balance_usd} USD)`}</InputAdornment>
+                      <InputAdornment position='start'>{`${
+                        data.address.balance / 1e18
+                      } eth (${data.address.balance_usd} USD)`}</InputAdornment>
                     }
                   />
                 </FormControl>
@@ -207,12 +210,28 @@ const Address = () => {
                       }}
                     >
                       <TableCell component='th' scope='row'>
-                        {row.hash ? row.hash.substring(0, 10) + "..." : null}
+                        {row.hash
+                          ? row.hash.substring(0, 7) +
+                            "..." +
+                            row.hash.substring(row.hash.length - 7)
+                          : null}
                       </TableCell>
                       <TableCell align='left'>{row.block}</TableCell>
                       <TableCell align='left'>{row.time}</TableCell>
-                      <TableCell align='left'>{row.from}</TableCell>
-                      <TableCell align='left'>{row.to}</TableCell>
+                      <TableCell align='left'>
+                        {row.from
+                          ? row.from.substring(0, 7) +
+                            "..." +
+                            row.from.substring(row.from.length - 7)
+                          : null}
+                      </TableCell>
+                      <TableCell align='left'>
+                        {row.to
+                          ? row.to.substring(0, 7) +
+                            "..." +
+                            row.to.substring(row.to.length - 7)
+                          : null}
+                      </TableCell>
                       <TableCell align='left'>{row.value / 1e18}</TableCell>
                     </TableRow>
                   ))}
