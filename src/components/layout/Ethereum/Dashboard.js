@@ -4,6 +4,7 @@ import {
   searchBlockHeight,
   getLastTenTransactions,
 } from "../../../apis/ethereum";
+import { Link } from "react-router-dom";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -94,7 +95,9 @@ const Dashboard = () => {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component='th' scope='row'>
-                      {row.block}
+                      <Link to={`/ethereum/block/${row.block}`}>
+                        {row.block}
+                      </Link>
                     </TableCell>
                     <TableCell align='left'>{row.miner}</TableCell>
                     <TableCell align='left'>{row.transactions}</TableCell>
@@ -128,7 +131,13 @@ const Dashboard = () => {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component='th' scope='row'>
-                      {row.txhash ? row.txhash.substring(0, 20) + "..." : null}
+                      <Link to={`/ethereum/transaction/${row.txhash}`}>
+                        {row.txhash
+                          ? row.txhash.substring(0, 7) +
+                            "..." +
+                            row.txhash.substring(row.txhash.length - 7)
+                          : null}
+                      </Link>
                     </TableCell>
                     <TableCell align='left'>{row.sender}</TableCell>
                     <TableCell align='left'>{row.recipient}</TableCell>

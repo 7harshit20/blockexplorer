@@ -17,7 +17,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import {Link} from 'react-router-dom';
 
-function AddressDetails() {
+function AddressDetailsBitcoin() {
   const [data, setData] = useState(null);
   const transactionData=[]
   const [rows, setRows] = useState([]);
@@ -224,4 +224,4 @@ function AddressDetails() {
   );
 };
 
-export default AddressDetails;
+export default AddressDetailsBitcoin;

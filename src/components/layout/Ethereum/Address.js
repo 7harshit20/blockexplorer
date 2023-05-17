@@ -26,13 +26,13 @@ const Address = () => {
   }
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (address) => {
       const res = await getAddressInfo(address);
       setData(res[address.toLocaleLowerCase()]);
       // console.log("res", res, "address", address);
       // console.log(res[address.toLocaleLowerCase()]);
     };
-    fetchData();
+    fetchData(address);
   }, []);
 
   useEffect(() => {

@@ -1,13 +1,17 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Ethereum from "./components/pages/Ethereum";
-import Bitcoin from "./components/pages/Bitcoin";
 import Home from "./components/pages/Home";
+import Ethereum from "./components/pages/Ethereum";
 import Dashboard from "./components/layout/Ethereum/Dashboard";
 import Address from "./components/layout/Ethereum/Address";
-import BlockDetails from "./components/layout/Bitcoin/BlockDetails";
-import TransactionDetails from "./components/layout/Bitcoin/TransactionDetails";
-import AddressDetails from "./components/layout/Bitcoin/AddressDetails";
+import Transaction from "./components/layout/Ethereum/Transaction";
+
+import Bitcoin from "./components/pages/Bitcoin";
+import BlockDetailsBitcoin from "./components/layout/BlockDetailsBitcoin";
+import TransactionDetailsBitcoin from "./components/layout/TransactionDetailsBitcoin";
+import AddressDetailsBitcoin from "./components/layout/Bitcoin/AddressDetailsBitcoin";
+import Block from "./components/layout/Ethereum/Block";
+import Transactions from "./components/layout/Ethereum/Transactions";
 // import Search from "./components/layout/Search";
 
 // import TextField from "@mui/material/TextField";
@@ -18,14 +22,20 @@ const App = () => {
     <Router>
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/ethereum' element={<Ethereum />}>
-          <Route path='/ethereum' element={<Dashboard />} />
+        <Route path='ethereum' element={<Ethereum />}>
+          <Route path='' element={<Dashboard />} />
+          <Route path='transaction'>
+            <Route path='' element={<Transactions />} />
+            <Route path=':txhash' element={<Transaction />} />
+          </Route>
+          {/* <Route path='transaction/:txhash' element={<Transaction />} /> */}
+          <Route path='block/:blockId' element={<Block />} />
           <Route path='address/:address' element={<Address />} />
         </Route>
         <Route path='/bitcoin' element={<Bitcoin />} />
-        <Route path='/bitcoin/block/:blockId' element={<BlockDetails />} />
-        <Route path='/bitcoin/transaction/:transactionId' element={<TransactionDetails />}  />
-        <Route path='/bitcoin/address/:address' element={<AddressDetails />}  />
+        <Route path='/bitcoin/block/:blockId' element={<BlockDetailsBitcoin />} />
+        <Route path='/bitcoin/transaction/:transactionId' element={<TransactionDetailsBitcoin />}  />
+        <Route path='/bitcoin/address/:address' element={<AddressDetailsBitcoin />}  />
         {/* <Route path='/bitcoin' element={<Ethereum />} /> */}
       </Routes>
     </Router>

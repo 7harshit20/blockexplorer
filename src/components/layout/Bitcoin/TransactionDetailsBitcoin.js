@@ -20,7 +20,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 
-function TransactionDetails()
+function TransactionDetailsBitcoin()
 {
     const [transactionData,setTransactionData]=useState("");
    // const [rows, setRows] = useState([]);
@@ -196,4 +196,4 @@ function TransactionDetails()
     )
 }
 
-export default TransactionDetails;
+export default TransactionDetailsBitcoin;

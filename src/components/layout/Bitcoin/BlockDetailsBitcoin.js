@@ -9,7 +9,7 @@ import FormControl from "@mui/material/FormControl";
 
 import { useLocation } from "react-router-dom";
 
-function BlockDetails()
+function BlockDetailsBitcoin()
 {
     const [blockData,setBlockData]=useState("");
    // const [rows, setRows] = useState([]);
@@ -193,4 +193,4 @@ function BlockDetails()
     )
 }
 
-export default BlockDetails;
+export default BlockDetailsBitcoin;
