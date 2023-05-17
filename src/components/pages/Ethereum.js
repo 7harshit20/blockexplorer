@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 const Ethereum = () => {
   const [search, setSearch] = useState("");
@@ -8,10 +8,13 @@ const Ethereum = () => {
     e.preventDefault();
     console.log(search.length);
     const addressregex = new RegExp("^0x[a-fA-F0-9]{40}$");
-    const blockheightregex = new RegExp("^[0-9]{1,7}$");
+    const blockheightregex = new RegExp("^[0-9]{1,10}$");
     const blockhashregex = new RegExp("^0x[a-fA-F0-9]{64}$");
     const transactionhashregex = new RegExp("^0x[a-fA-F0-9]{64}$");
 
+    if (transactionhashregex.test(search)) {
+      navigate(`/ethereum/transaction/${search}`);
+    }
     if (blockheightregex.test(search)) {
       navigate(`/ethereum/block/${search}`);
     }
@@ -24,7 +27,7 @@ const Ethereum = () => {
       <div class='row'>
         <div class='col-md-5 mx-auto'>
           <div class='large mt-5 mb-2 fw-light'>
-            The Ethereum Blockchain Explorer
+            <Link to={"/ethereum"}>The Ethereum Blockchain Explorer</Link>
           </div>
           <div class='input-group'>
             <input
