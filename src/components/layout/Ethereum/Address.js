@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { getAddressInfo } from "../../../apis/ethereum";
 import { useParams } from "react-router-dom";
+import ReactPaginate from "react-paginate";
+import axios from "axios";
+import "../../../styles/transactions.css";
+import { Link, useLocation } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import FilledInput from "@mui/material/FilledInput";
@@ -18,8 +21,13 @@ import Paper from "@mui/material/Paper";
 const Address = () => {
   const [data, setData] = useState(null);
   const [rows, setRows] = useState([]);
+  const [err, setErr] = useState("");
+  const [currentPage, setCurrentPage] = useState(0);
+  // const location = useLocation();
 
   const { address } = useParams();
+  const itemsPerPage = 10;
+  const pageCount = 10000;
 
   function createData(hash, block, time, from, to, value) {
     return { hash, block, time, from, to, value };
@@ -27,13 +35,26 @@ const Address = () => {
 
   useEffect(() => {
     const fetchData = async (address) => {
-      const res = await getAddressInfo(address);
-      setData(res[address.toLocaleLowerCase()]);
-      // console.log("res", res, "address", address);
-      // console.log(res[address.toLocaleLowerCase()]);
+      try {
+        // const queryParams = new URLSearchParams(location.search);
+        // const q = queryParams.get("q");
+        // const s = queryParams.get("s");
+        const response = await axios.get(
+          `https://api.blockchair.com/ethereum/dashboards/address/${address}?erc_20=true&key=${
+            process.env.REACT_APP_BLOCKCHAIR_API_KEY
+          }&offset=${currentPage * itemsPerPage}&limit=${itemsPerPage}`
+        );
+        const res = response.data.data;
+        setData(res[address.toLocaleLowerCase()]);
+        console.log("res", res, "offset", currentPage * itemsPerPage);
+        console.log(res[address.toLocaleLowerCase()]);
+      } catch (error) {
+        console.log(error);
+        setErr(error.message);
+      }
     };
     fetchData(address);
-  }, []);
+  }, [currentPage]);
 
   useEffect(() => {
     if (data) {
@@ -54,12 +75,16 @@ const Address = () => {
     }
   }, [data]);
 
+  const handlePageChange = (selectedPage) => {
+    setCurrentPage(selectedPage.selected);
+  };
+
   return (
     <div class='row'>
       <div class='col-md-10 mx-auto'>
-        <div class='large mt-5 mb-2 fw-light'>Address Info</div>
         {data ? (
           <div class='row'>
+            <div class='large mt-5 mb-2 fw-light'>Address Info</div>
             <Box sx={{ display: "flex", flexWrap: "wrap" }}>
               <div>
                 <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
@@ -186,8 +211,8 @@ const Address = () => {
                   />
                 </FormControl>
               </div>
+              {/* <Button variant='contained'>View transactions</Button> */}
             </Box>
-
             <div class='large mt-5 mb-2 fw-light'>Transactions</div>
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-label='simple table'>
@@ -238,8 +263,20 @@ const Address = () => {
                 </TableBody>
               </Table>
             </TableContainer>
+            <div className='pagination-container'>
+              <ReactPaginate
+                pageCount={pageCount}
+                pageRangeDisplayed={3}
+                marginPagesDisplayed={2}
+                onPageChange={handlePageChange}
+                containerClassName={"pagination"}
+                activeClassName={"active"}
+              />
+            </div>
           </div>
-        ) : null}
+        ) : (
+          <div class='large mt-5 mb-2 fw-light'>{err}</div>
+        )}
       </div>
     </div>
   );

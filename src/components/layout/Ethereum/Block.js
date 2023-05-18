@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getBlockInfo } from "../../../apis/ethereum";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import FilledInput from "@mui/material/FilledInput";
@@ -83,7 +83,11 @@ const Block = () => {
                     id='filled-adornment-amount'
                     startAdornment={
                       <InputAdornment position='start'>
-                        {`${data.block.transaction_count} transactions`}
+                        <Link
+                          to={`/ethereum/transaction?q=block_id(${blockId})`}
+                        >
+                          {`${data.block.transaction_count} transactions`}
+                        </Link>
                       </InputAdornment>
                     }
                   />

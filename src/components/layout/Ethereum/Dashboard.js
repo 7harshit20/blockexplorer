@@ -76,7 +76,11 @@ const Dashboard = () => {
     <div>
       <div class='row'>
         <div class='col-md-10 mx-auto'>
-          <div class='large mt-5 mb-2 fw-light'>Latest Blocks</div>
+          <div class='large mt-5 mb-2 fw-light'>
+            {" "}
+            Latest Blocks |&nbsp;&nbsp;
+            <Link to={`/ethereum/block`}>View All Blocks</Link>
+          </div>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label='simple table'>
               <TableHead>
@@ -99,8 +103,19 @@ const Dashboard = () => {
                         {row.block}
                       </Link>
                     </TableCell>
-                    <TableCell align='left'>{row.miner}</TableCell>
-                    <TableCell align='left'>{row.transactions}</TableCell>
+                    <TableCell align='left'>
+                      <Link to={`/ethereum/address/${row.miner}`}>
+                        {row.miner}{" "}
+                      </Link>
+                    </TableCell>
+                    <TableCell align='left'>
+                      {" "}
+                      <Link
+                        to={`/ethereum/transaction?q=block_id(${row.block})`}
+                      >
+                        {row.transactions}
+                      </Link>
+                    </TableCell>
                     <TableCell align='left'>{row.reward / 1e18}</TableCell>
                     <TableCell align='left'>{row.time}</TableCell>
                   </TableRow>
@@ -142,8 +157,24 @@ const Dashboard = () => {
                           : null}
                       </Link>
                     </TableCell>
-                    <TableCell align='left'>{row.sender}</TableCell>
-                    <TableCell align='left'>{row.recipient}</TableCell>
+                    <TableCell align='left'>
+                      <Link to={`/ethereum/address/${row.sender}`}>
+                        {row.sender
+                          ? row.sender.substring(0, 7) +
+                            "..." +
+                            row.sender.substring(row.sender.length - 7)
+                          : null}
+                      </Link>
+                    </TableCell>
+                    <TableCell align='left'>
+                      <Link to={`/ethereum/address/${row.recipient}`}>
+                        {row.recipient
+                          ? row.recipient.substring(0, 7) +
+                            "..." +
+                            row.recipient.substring(row.recipient.length - 7)
+                          : null}
+                      </Link>
+                    </TableCell>
                     <TableCell align='left'>{row.value / 1e18}</TableCell>
                     <TableCell align='left'>{row.time}</TableCell>
                   </TableRow>
