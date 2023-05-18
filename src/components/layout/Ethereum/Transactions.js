@@ -27,30 +27,36 @@ const Transactions = () => {
 
   useEffect(() => {
     const fetchDataAndUpdateTable = async () => {
-      const queryParams = new URLSearchParams(location.search);
-      const q = queryParams.get("q");
-      const s = queryParams.get("s");
-      const response = await axios.get(
-        `https://api.blockchair.com/ethereum/transactions?&offset=${
-          currentPage * itemsPerPage
-        }&limit=${itemsPerPage}${q ? `&q=${q}` : ""}${s ? `&s=${s}` : ""}`
-      );
-      const data = response.data.data;
-      console.log(data);
-      setTransactions(
-        data.map((transaction) => {
-          return createData(
-            transaction.hash,
-            transaction.block_id,
-            transaction.failed,
-            transaction.sender,
-            transaction.recipient,
-            transaction.value,
-            transaction.time
-          );
-        })
-      );
-      console.log("transactions", transactions);
+      try {
+        const queryParams = new URLSearchParams(location.search);
+        const q = queryParams.get("q");
+        const s = queryParams.get("s");
+        const response = await axios.get(
+          `https://api.blockchair.com/ethereum/transactions?key=${
+            process.env.REACT_APP_BLOCKCHAIR_API_KEY
+          }&offset=${currentPage * itemsPerPage}&limit=${itemsPerPage}${
+            q ? `&q=${q}` : ""
+          }${s ? `&s=${s}` : ""}`
+        );
+        const data = response.data.data;
+        console.log(data);
+        setTransactions(
+          data.map((transaction) => {
+            return createData(
+              transaction.hash,
+              transaction.block_id,
+              transaction.failed,
+              transaction.sender,
+              transaction.recipient,
+              transaction.value,
+              transaction.time
+            );
+          })
+        );
+        console.log("transactions", transactions);
+      } catch (error) {
+        console.log(error);
+      }
     };
     fetchDataAndUpdateTable();
   }, [currentPage]);
