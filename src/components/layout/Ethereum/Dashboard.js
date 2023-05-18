@@ -112,7 +112,10 @@ const Dashboard = () => {
       </div>
       <div class='row'>
         <div class='col-md-10 mx-auto'>
-          <div class='large mt-5 mb-2 fw-light'>Latest Transactions</div>
+          <div class='large mt-5 mb-2 fw-light'>
+            Latest Transactions |&nbsp;&nbsp;
+            <Link to={`/ethereum/transaction`}>View All Transactions</Link>
+          </div>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label='simple table'>
               <TableHead>
