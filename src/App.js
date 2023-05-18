@@ -7,8 +7,8 @@ import Address from "./components/layout/Ethereum/Address";
 import Transaction from "./components/layout/Ethereum/Transaction";
 
 import Bitcoin from "./components/pages/Bitcoin";
-import BlockDetailsBitcoin from "./components/layout/BlockDetailsBitcoin";
-import TransactionDetailsBitcoin from "./components/layout/TransactionDetailsBitcoin";
+import BlockDetailsBitcoin from "./components/layout/Bitcoin/BlockDetailsBitcoin";
+import TransactionDetailsBitcoin from "./components/layout/Bitcoin/TransactionDetailsBitcoin";
 import AddressDetailsBitcoin from "./components/layout/Bitcoin/AddressDetailsBitcoin";
 import Block from "./components/layout/Ethereum/Block";
 import Transactions from "./components/layout/Ethereum/Transactions";

@@ -1,5 +1,6 @@
 import react from 'react';
 import {useState,useEffect} from 'react'
+
 import { getLastTenBlocks,searchBlockHeight,getLastTenTransactions, } from '../../apis/bitcoin';
 
 import Table from "@mui/material/Table";
@@ -9,16 +10,17 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import {Link} from 'react-router-dom'
+import {Link,useNavigate} from 'react-router-dom'
+import SearchBar from '../layout/Bitcoin/SearchBar';
 
 function Bitcoin()
 {
-   const [search, setSearch] = useState("");
    const [blockHeight, setBlockHeight] = useState("");
    const [lastTenBlocks, setLastTenBlocks] = useState([]);
    const [lastTenTransactions, setLastTenTransactions] = useState([]);
    const [rows, setRows] = useState([]);
    const [txrows, setTxRows] = useState([]);
+   const navigate=useNavigate()
 
   function createData(block, miner, transactions, reward, time) {
     return { block, miner, transactions, reward, time };
@@ -26,6 +28,7 @@ function Bitcoin()
   function createTxData(txhash, sender, recipient, value, time) {
     return { txhash, sender, recipient, value, time };
   }
+
 
   useEffect(()=>{
    async function fetchData() {
@@ -75,30 +78,7 @@ function Bitcoin()
  }, [lastTenTransactions]);
   return (
    <div>
-   <div class='row'>
-     <div class='col-md-5 mx-auto'>
-       <div class='large mt-5 mb-2 fw-light'>
-         The Bitcoin Blockchain Explorer
-       </div>
-       <div class='input-group'>
-         <input
-           class='form-control border-end-0 border rounded-pill'
-           type='search'
-           placeholder='Search by transaction hash, block hash, address, or block height'
-           id='example-search-input'
-           onChange={(e) => setSearch(e.target.reward)}
-         />
-         <span class='input-group-append'>
-           <button
-             class='btn btn-outline-secondary bg-white border-bottom-0 border rounded-pill ms-n5'
-             type='button'
-           >
-             <i class='fa fa-search'></i>
-           </button>
-         </span>
-       </div>
-     </div>
-   </div>
+    <SearchBar/>
    <div class='row'>
      <div class='col-md-10 mx-auto'>
        <div class='large mt-5 mb-2 fw-light'>Latest Blocks</div>
