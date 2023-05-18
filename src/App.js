@@ -7,8 +7,9 @@ import Address from "./components/layout/Ethereum/Address";
 import Transaction from "./components/layout/Ethereum/Transaction";
 
 import Bitcoin from "./components/pages/Bitcoin";
-import BlockDetails from "./components/layout/BlockDetails";
-import TransactionDetails from "./components/layout/TransactionDetails";
+import BlockDetailsBitcoin from "./components/layout/BlockDetailsBitcoin";
+import TransactionDetailsBitcoin from "./components/layout/TransactionDetailsBitcoin";
+import AddressDetailsBitcoin from "./components/layout/Bitcoin/AddressDetailsBitcoin";
 import Block from "./components/layout/Ethereum/Block";
 import Transactions from "./components/layout/Ethereum/Transactions";
 // import Search from "./components/layout/Search";
@@ -32,11 +33,9 @@ const App = () => {
           <Route path='address/:address' element={<Address />} />
         </Route>
         <Route path='/bitcoin' element={<Bitcoin />} />
-        <Route path='/bitcoin/block/:blockId' element={<BlockDetails />} />
-        <Route
-          path='/bitcoin/transaction/:transactionId'
-          element={<TransactionDetails />}
-        />
+        <Route path='/bitcoin/block/:blockId' element={<BlockDetailsBitcoin />} />
+        <Route path='/bitcoin/transaction/:transactionId' element={<TransactionDetailsBitcoin />}  />
+        <Route path='/bitcoin/address/:address' element={<AddressDetailsBitcoin />}  />
         {/* <Route path='/bitcoin' element={<Ethereum />} /> */}
       </Routes>
     </Router>
