@@ -58,4 +58,19 @@ export const searchTransactions = async (th) => {
     console.log(response.data.data[`${ad}`]);
     return response.data.data[`${ad}`];
   };
+
+  export const getTransactionHistory=async(ad,currentPage,itemsPerPage)=>{
+    const response = await axios.get(
+      `https://api.blockchair.com/bitcoin/transactions?address/${ad}?erc_20=true&offset=${currentPage*itemsPerPage}&limit=${itemsPerPage}&key=${api_key_ct}`
+    );
+    console.log(response)
+    return response.data.data;
+  }
+
+  export const getTransactionBlock=async(blockHeight,currentPage,itemsPerPage)=>{
+      const response=await axios.get(
+        `https://api.blockchair.com/bitcoin/transactions?&q=block_id(${blockHeight})&offset=${currentPage*itemsPerPage}&limit=${itemsPerPage}&key=${api_key_ct}`
+      )
+      return response.data.data;
+  }
   

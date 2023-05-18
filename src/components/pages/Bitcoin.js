@@ -10,7 +10,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import {Link,useNavigate} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import SearchBar from '../layout/Bitcoin/SearchBar';
 
 function Bitcoin()
@@ -20,7 +20,6 @@ function Bitcoin()
    const [lastTenTransactions, setLastTenTransactions] = useState([]);
    const [rows, setRows] = useState([]);
    const [txrows, setTxRows] = useState([]);
-   const navigate=useNavigate()
 
   function createData(block, miner, transactions, reward, time) {
     return { block, miner, transactions, reward, time };

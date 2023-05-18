@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getAddressInfo } from "../../../apis/bitcoin";
 import { searchTransactions } from "../../../apis/bitcoin";
 import { useParams } from "react-router-dom";
-
+import ReactPaginate from "react-paginate";
 import Box from "@mui/material/Box";
 import FilledInput from "@mui/material/FilledInput";
 import InputLabel from "@mui/material/InputLabel";
@@ -16,10 +16,11 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import {Link} from 'react-router-dom';
+import SearchBar from "./SearchBar";
 
 function AddressDetailsBitcoin() {
   const [data, setData] = useState(null);
-  const transactionData=[]
+  const [offset,setOffset]=useState(0)
   const [rows, setRows] = useState([]);
 
   const { address } = useParams();
@@ -27,6 +28,12 @@ function AddressDetailsBitcoin() {
   function createData(hash) {
     return { hash};
   }
+
+  const handlePageClick = (event) => {
+    const newOffset = (event.selected * 5) % data.transactions.length;
+    
+    setOffset(newOffset);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,8 +49,11 @@ function AddressDetailsBitcoin() {
   useEffect(() => {
     if (data) {
       //console.log("data", data.calls.length);
+      const perRow=data.transactions.slice(offset,Math.min(offset+5,data.transactions.length));
+      console.log(perRow)
       setRows(
-        data.transactions.map((txs) => {
+        perRow.map((txs) => {
+
           console.log(txs)
           
           return createData(
@@ -53,10 +63,11 @@ function AddressDetailsBitcoin() {
       );
       console.log("rows", rows);
     }
-  }, [data]);
+  }, [offset]);
 
   return (
     <div class='row'>
+      <SearchBar/>
       <div class='col-md-10 mx-auto'>
         <div class='large mt-5 mb-2 fw-light'>Address Info</div>
         {data ? (
@@ -186,6 +197,21 @@ function AddressDetailsBitcoin() {
                     }
                   />
                 </FormControl>
+
+                <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
+                    <InputLabel htmlFor='filled-adornment-amount'>
+                      Number Of Transactions
+                    </InputLabel>
+                    <FilledInput
+                      disabled
+                      id='filled-adornment-amount'
+                      startAdornment={
+                        <InputAdornment position='start'>
+                          {data.address.transaction_count}
+                        </InputAdornment>
+                      }
+                    />
+                  </FormControl>
               </div>
             </Box>
 
@@ -217,6 +243,14 @@ function AddressDetailsBitcoin() {
                 </TableBody>
               </Table>
             </TableContainer>
+            <ReactPaginate
+             pageCount={10}
+             pageRangeDisplayed={3}
+             marginPagesDisplayed={2}
+             onPageChange={handlePageClick}
+             containerClassName={"pagination"}
+             activeClassName={"active"}
+      />
           </div>
         ) : "AAAAA"}
       </div>
