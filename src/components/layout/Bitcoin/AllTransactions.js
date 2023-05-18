@@ -13,13 +13,13 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-const Transactions = () => {
+function AllTransactions() {
   const [transactions, setTransactions] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const location = useLocation();
 
-  function createData(txhash, block, failed, sender, recipient, value, time) {
-    return { txhash, block, failed, sender, recipient, value, time };
+  function createData(txhash, block, sender, recipient, value, time) {
+    return { txhash, block, sender, recipient, value, time };
   }
 
   const itemsPerPage = 10;
@@ -33,7 +33,7 @@ const Transactions = () => {
       console.log(q)
       console.log(s)
       const response = await axios.get(
-        `https://api.blockchair.com/ethereum/transactions?&offset=${
+        `https://api.blockchair.com/bitcoin/transactions?&offset=${
           currentPage * itemsPerPage
         }&limit=${itemsPerPage}${q ? `&q=${q}` : ""}${s ? `&s=${s}` : ""}`
       );
@@ -44,10 +44,9 @@ const Transactions = () => {
           return createData(
             transaction.hash,
             transaction.block_id,
-            transaction.failed,
-            transaction.sender,
-            transaction.recipient,
-            transaction.value,
+            transaction.input_count,
+            transaction.output_count,
+            transaction.output_total,
             transaction.time
           );
         })
@@ -72,10 +71,9 @@ const Transactions = () => {
                 <TableRow>
                   <TableCell>Tx Hash</TableCell>
                   <TableCell align='left'>Block</TableCell>
-                  <TableCell align='left'>failed</TableCell>
                   <TableCell align='left'>Sender</TableCell>
                   <TableCell align='left'>Recipient</TableCell>
-                  <TableCell align='left'>Value&nbsp;(eth)</TableCell>
+                  <TableCell align='left'>Value&nbsp;(BTC)</TableCell>
                   <TableCell align='left'>Time</TableCell>
                 </TableRow>
               </TableHead>
@@ -86,7 +84,7 @@ const Transactions = () => {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component='th' scope='row'>
-                      <Link to={`/ethereum/transaction/${row.txhash}`}>
+                      <Link to={`/bitcoin/transaction/${row.txhash}`}>
                         {row && row.txhash
                           ? `${row.txhash.substring(
                               0,
@@ -95,29 +93,15 @@ const Transactions = () => {
                           : null}
                       </Link>
                     </TableCell>
-                    <TableCell align='left'>{row.block}</TableCell>
+                    <TableCell align='left'><Link to={`/bitcoin/block/${row.block}`}>{row.block}</Link></TableCell>
+                   
                     <TableCell align='left'>
-                      {row.failed ? "Yes" : "No"}
+                      {row.sender}
                     </TableCell>
                     <TableCell align='left'>
-                      {row && row.sender
-                        ? `${row.sender.substring(
-                            0,
-                            7
-                          )}...${row.sender.substring(row.sender.length - 7)}`
-                        : "-"}
+                      {row.recipient}
                     </TableCell>
-                    <TableCell align='left'>
-                      {row && row.recipient
-                        ? `${row.recipient.substring(
-                            0,
-                            7
-                          )}...${row.recipient.substring(
-                            row.recipient.length - 7
-                          )}`
-                        : null}
-                    </TableCell>
-                    <TableCell align='left'>{row.value / 1e18}</TableCell>
+                    <TableCell align='left'>{row.value / 1e8}</TableCell>
                     <TableCell align='left'>{row.time}</TableCell>
                   </TableRow>
                 ))}
@@ -140,4 +124,4 @@ const Transactions = () => {
   );
 };
 
-export default Transactions;
+export default AllTransactions;

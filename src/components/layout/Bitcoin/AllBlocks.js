@@ -13,13 +13,13 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-const Transactions = () => {
-  const [transactions, setTransactions] = useState([]);
+function AllBlocks(){
+  const [blocks, setBlocks] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const location = useLocation();
 
-  function createData(txhash, block, failed, sender, recipient, value, time) {
-    return { txhash, block, failed, sender, recipient, value, time };
+  function createData(hash, id, miner, reward, time, txs) {
+    return { hash, id, miner, reward, time, txs };
   }
 
   const itemsPerPage = 10;
@@ -33,26 +33,25 @@ const Transactions = () => {
       console.log(q)
       console.log(s)
       const response = await axios.get(
-        `https://api.blockchair.com/ethereum/transactions?&offset=${
+        `https://api.blockchair.com/bitcoin/blocks?&offset=${
           currentPage * itemsPerPage
         }&limit=${itemsPerPage}${q ? `&q=${q}` : ""}${s ? `&s=${s}` : ""}`
       );
       const data = response.data.data;
       console.log(data);
-      setTransactions(
-        data.map((transaction) => {
+      setBlocks(
+        data.map((block) => {
           return createData(
-            transaction.hash,
-            transaction.block_id,
-            transaction.failed,
-            transaction.sender,
-            transaction.recipient,
-            transaction.value,
-            transaction.time
+            block.hash,
+            block.id,
+            block.guessed_miner,
+            block.reward,
+            block.time,
+            block.transaction_count
           );
         })
       );
-      console.log("transactions", transactions);
+      //console.log("blocks", blocks);
     };
     fetchDataAndUpdateTable();
   }, [currentPage]);
@@ -65,60 +64,49 @@ const Transactions = () => {
     <div>
       <div class='row'>
         <div class='col-md-10 mx-auto'>
-          <div class='large mt-5 mb-2 fw-light'>Transaction List</div>
+          <div class='large mt-5 mb-2 fw-light'>Block List</div>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label='simple table'>
               <TableHead>
                 <TableRow>
-                  <TableCell>Tx Hash</TableCell>
-                  <TableCell align='left'>Block</TableCell>
-                  <TableCell align='left'>failed</TableCell>
-                  <TableCell align='left'>Sender</TableCell>
-                  <TableCell align='left'>Recipient</TableCell>
-                  <TableCell align='left'>Value&nbsp;(eth)</TableCell>
+                  <TableCell>Block Hash</TableCell>
+                  <TableCell align='left'>Block Height</TableCell>
+                  <TableCell align='left'>Miner</TableCell>
+                  <TableCell align='left'>reward&nbsp;(BTC)</TableCell>
                   <TableCell align='left'>Time</TableCell>
+                  <TableCell align='left'>Transactions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {transactions.map((row) => (
+                {blocks.map((row) => (
                   <TableRow
-                    key={row.txhash}
+                    key={row.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
+                    <TableCell align='left'>
+                      <Link to={`/bitcoin/block/${row.id}`}>{row.id}</Link>
+                    </TableCell>
                     <TableCell component='th' scope='row'>
-                      <Link to={`/ethereum/transaction/${row.txhash}`}>
-                        {row && row.txhash
-                          ? `${row.txhash.substring(
-                              0,
-                              7
-                            )}...${row.txhash.substring(row.txhash.length - 7)}`
-                          : null}
-                      </Link>
-                    </TableCell>
-                    <TableCell align='left'>{row.block}</TableCell>
-                    <TableCell align='left'>
-                      {row.failed ? "Yes" : "No"}
-                    </TableCell>
-                    <TableCell align='left'>
-                      {row && row.sender
-                        ? `${row.sender.substring(
-                            0,
-                            7
-                          )}...${row.sender.substring(row.sender.length - 7)}`
-                        : "-"}
-                    </TableCell>
-                    <TableCell align='left'>
-                      {row && row.recipient
-                        ? `${row.recipient.substring(
-                            0,
-                            7
-                          )}...${row.recipient.substring(
-                            row.recipient.length - 7
+                      {row && row.hash
+                        ? `${row.hash.substring(0, 7)}...${row.hash.substring(
+                            row.hash.length - 7
                           )}`
                         : null}
                     </TableCell>
-                    <TableCell align='left'>{row.value / 1e18}</TableCell>
+                    <TableCell align='left'>
+                      {row && row.miner
+                        ? `${row.miner.substring(0, 7)}...${row.miner.substring(
+                            row.miner.length - 7
+                          )}`
+                        : "-"}
+                    </TableCell>
+                    <TableCell align='left'>{row.reward / 1e8}</TableCell>
                     <TableCell align='left'>{row.time}</TableCell>
+                    <TableCell align='left'>
+                      
+                        {row.txs}
+                      
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -140,4 +128,4 @@ const Transactions = () => {
   );
 };
 
-export default Transactions;
+export default AllBlocks;
