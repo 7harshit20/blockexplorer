@@ -3,21 +3,18 @@ import { useState,useEffect } from "react";
 import { searchTransactions } from "../../../apis/bitcoin";
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid'
-import TextField from '@mui/material/TextField';
 import { useLocation } from "react-router-dom";
 import {Link} from 'react-router-dom';
-import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import SearchBar from "./SearchBar";
+import FilledInput from "@mui/material/FilledInput";
+import InputLabel from "@mui/material/InputLabel";
+import InputAdornment from "@mui/material/InputAdornment";
+import FormControl from "@mui/material/FormControl";
 
 
 function TransactionDetailsBitcoin()
@@ -40,93 +37,99 @@ function TransactionDetailsBitcoin()
 
     console.log(transactionData)
     return(
-      <>{transactionData!==""&&<div>
+      <>
+      <SearchBar/>
+      <br></br>
+      {transactionData!==""&&<div>
       
-       <Box
-      component="form"
-      sx={{
-        
-        '& .MuiTextField-root': { m: 1, width: '50ch' },
-      }}
-      noValidate
-      autoComplete="off"
-    >
-      
-      <div>
-        
-        <TextField
-          id="filled-read-only-input"
-          label="Block"
-          defaultValue={transactionData.transaction.block_id}
-          InputProps={{
-            readOnly: true,
-          }}
-          variant="filled"
-        />
+      <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+              <div>
+                <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
+                  <InputLabel htmlFor='filled-adornment-amount'>
+                    Block
+                  </InputLabel>
+                  <FilledInput
+                    disabled
+                    id='filled-adornment-amount'
+                    startAdornment={
+                      <InputAdornment position='start'>
+                        <Link to={`/bitcoin/block/${transactionData.transaction.block_id}`}>{transactionData.transaction.block_id}</Link>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
 
-        <TextField
-          id="filled-read-only-input"
-          label="Time"
-          defaultValue={transactionData.transaction.time}
-          InputProps={{
-            readOnly: true,
-          }}
-          variant="filled"
-        />
-       
-       
-      </div>
+                <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
+                  <InputLabel htmlFor='filled-adornment-amount'>
+                    Amount Transacted
+                  </InputLabel>
+                  <FilledInput
+                    disabled
+                    id='filled-adornment-amount'
+                    startAdornment={
+                      <InputAdornment position='start'>{`${
+                        transactionData.transaction.output_total/1e8
+                      } BTC (${transactionData.transaction.output_total} USD)`}</InputAdornment>
+                    }
+                  />
+                </FormControl>
 
-      <div>
-        
-        <TextField
-          id="filled-read-only-input"
-          label="Senders"
-          defaultValue={transactionData.transaction.input_count}
-          InputProps={{
-            readOnly: true,
-          }}
-          variant="filled"
-        />
+                <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
+                  <InputLabel htmlFor='filled-adornment-amount'>
+                   Transaction Fee
+                  </InputLabel>
+                  <FilledInput
+                    disabled
+                    id='filled-adornment-amount'
+                    startAdornment={
+                      <InputAdornment position='start'>{`${
+                        transactionData.transaction.fee/1e8
+                      } BTC (${
+                        transactionData.transaction.fee_usd
+                      } USD)`}</InputAdornment>
+                    }
+                  />
+                </FormControl>
 
-        <TextField
-          id="filled-read-only-input"
-          label="Receiver"
-          defaultValue={transactionData.transaction.output_count}
-          InputProps={{
-            readOnly: true,
-          }}
-          variant="filled"
-        />
-       
-       
-      </div>
+                
 
-      <div>
-        
-        <TextField
-          id="filled-read-only-input"
-          label="Amount Transacted"
-          defaultValue={transactionData.transaction.output_total_usd}
-          InputProps={{
-            readOnly: true,
-          }}
-          variant="filled"
-        />
-         
-        <TextField
-          id="filled-read-only-input"
-          label="Transcation Fee"
-          defaultValue={transactionData.transaction.input_total_usd-transactionData.transaction.output_total_usd}
-          InputProps={{
-            readOnly: true,
-          }}
-          variant="filled"
-        />
-       
-       
-      </div>
-      </Box>
+               
+
+                <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
+                  <InputLabel htmlFor='filled-adornment-amount'>
+                    Recievers
+                  </InputLabel>
+                  <FilledInput
+                    disabled
+                    id='filled-adornment-amount'
+                    startAdornment={
+                      <InputAdornment position='start'>{`${
+                        transactionData.transaction.output_count
+                      } `}</InputAdornment>
+                    }
+                  />
+                </FormControl>
+
+                <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
+                  <InputLabel htmlFor='filled-adornment-amount'>
+                    Senders
+                  </InputLabel>
+                  <FilledInput
+                    disabled
+                    id='filled-adornment-amount'
+                    startAdornment={
+                      <InputAdornment position='start'>
+                        {transactionData.transaction.input_count}
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+
+                
+
+                
+              </div>
+            </Box>
 
       <Grid container justify="center">
         <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper'}}>

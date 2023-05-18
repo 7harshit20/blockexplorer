@@ -13,6 +13,8 @@ import AddressDetailsBitcoin from "./components/layout/Bitcoin/AddressDetailsBit
 import Block from "./components/layout/Ethereum/Block";
 import Transactions from "./components/layout/Ethereum/Transactions";
 import Blocks from "./components/layout/Ethereum/Blocks";
+import AllBlocks from "./components/layout/Bitcoin/AllBlocks";
+import AllTransactions from "./components/layout/Bitcoin/AllTransactions";
 // import Search from "./components/layout/Search";
 
 // import TextField from "@mui/material/TextField";
@@ -47,6 +49,14 @@ const App = () => {
         <Route
           path='/bitcoin/address/:address'
           element={<AddressDetailsBitcoin />}
+        />
+        <Route
+          path='/bitcoin/blocks'
+          element={<AllBlocks />}
+        />
+        <Route
+          path='/bitcoin/transactions'
+          element={<AllTransactions/>}
         />
         {/* <Route path='/bitcoin' element={<Ethereum />} /> */}
       </Routes>
