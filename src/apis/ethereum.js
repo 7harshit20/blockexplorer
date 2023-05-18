@@ -56,3 +56,13 @@ export const getBlockInfo = async (bl) => {
   console.log(response.data.data);
   return response.data.data;
 };
+
+export const getTransactions = async (currentPage, itemsPerPage) => {
+  const response = await axios.get(
+    `https://api.blockchair.com/ethereum/transactions?&s=id(desc)&offset=${
+      currentPage * itemsPerPage
+    }&limit=${itemsPerPage}`
+  );
+  console.log(response.data.data);
+  return response.data.data;
+};
