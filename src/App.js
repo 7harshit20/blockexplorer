@@ -15,6 +15,7 @@ import Transactions from "./components/layout/Ethereum/Transactions";
 import Blocks from "./components/layout/Ethereum/Blocks";
 import AllBlocks from "./components/layout/Bitcoin/AllBlocks";
 import AllTransactions from "./components/layout/Bitcoin/AllTransactions";
+import Charts from "./components/layout/Ethereum/Charts";
 // import Search from "./components/layout/Search";
 
 // import TextField from "@mui/material/TextField";
@@ -36,6 +37,7 @@ const App = () => {
             <Route path=':blockId' element={<Block />} />
           </Route>
           <Route path='address/:address' element={<Address />} />
+          <Route path='charts' element={<Charts />} />
         </Route>
         <Route path='/bitcoin' element={<Bitcoin />} />
         <Route
@@ -50,14 +52,8 @@ const App = () => {
           path='/bitcoin/address/:address'
           element={<AddressDetailsBitcoin />}
         />
-        <Route
-          path='/bitcoin/blocks'
-          element={<AllBlocks />}
-        />
-        <Route
-          path='/bitcoin/transactions'
-          element={<AllTransactions/>}
-        />
+        <Route path='/bitcoin/blocks' element={<AllBlocks />} />
+        <Route path='/bitcoin/transactions' element={<AllTransactions />} />
         {/* <Route path='/bitcoin' element={<Ethereum />} /> */}
       </Routes>
     </Router>
