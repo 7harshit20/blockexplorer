@@ -15,6 +15,7 @@ import Transactions from "./components/layout/Ethereum/Transactions";
 import Blocks from "./components/layout/Ethereum/Blocks";
 import AllBlocks from "./components/layout/Bitcoin/AllBlocks";
 import AllTransactions from "./components/layout/Bitcoin/AllTransactions";
+import { VisualizationBitcoin } from "./components/layout/Bitcoin/VisualizationBitcoin";
 import Charts from "./components/layout/Ethereum/Charts";
 // import Search from "./components/layout/Search";
 
@@ -54,6 +55,10 @@ const App = () => {
         />
         <Route path='/bitcoin/blocks' element={<AllBlocks />} />
         <Route path='/bitcoin/transactions' element={<AllTransactions />} />
+        <Route
+          path='/bitcoin/visualization'
+          element={<VisualizationBitcoin/>}
+        />
         {/* <Route path='/bitcoin' element={<Ethereum />} /> */}
       </Routes>
     </Router>
