@@ -1,8 +1,10 @@
 import React from "react";
 import axios from "axios";
-const api_key_ct = process.env.REACT_APP_BLOCKCHAIR_API_KEY_CT;
+const api_key_ct = 'A___ldisHyqV8cgPcRO3NsDWIVCv3JQ5';
+console.log(api_key_ct)
 
 export const searchTransactions = async (th) => {
+  console.log(api_key_ct)
     const response = await axios.get(
       `https://api.blockchair.com/bitcoin/dashboards/transaction/${th}?key=${api_key_ct}`
     );

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useEffect,useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import {
   Chart as ChartJS,
@@ -22,19 +23,7 @@ ChartJS.register(
   Legend
 );
 
-export const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text: 'Chart.js Bar Chart',
-      },
-      
-    },
-  };
+ 
   
 
 
@@ -42,6 +31,7 @@ export function VisualizationBitcoin() {
   const [transactionCount,setTransactionCount]=useState([])
   const[labels,setLabels]=useState([])
   const [transactionSum,setTransactionSum]=useState([])
+  const navigate=useNavigate()
   function createData(data) {
     return data ;
   }
@@ -88,8 +78,8 @@ export function VisualizationBitcoin() {
     }
     getData()
   },[])  
-  console.log(transactionCount)
-  console.log(transactionSum)
+  // console.log(transactionCount)
+  // console.log(transactionSum)
   const data={
     labels,
     datasets: [
@@ -111,9 +101,36 @@ export function VisualizationBitcoin() {
         }
       ],
   }
+
+  const options = {
+    responsive: true,
+    onClick: (event, elements) => {
+      console.log(event)
+      console.log(elements)
+      const index=elements[0].index;
+      console.log(index);
+      navigate(`/bitcoin/visualization/${labels[index]}`)
+      // const chart = elements[0]._chart;
+      // const element = chart.getElementAtEvent(event)[0];
+      // const dataset = chart.data.datasets[element._datasetIndex];
+      // const xLabel = chart.data.labels[element._index];
+      // const value = dataset.data[element._index];
+      // console.log(dataset.label + " at " + xLabel + ": " + value);
+    },
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Chart.js Bar Chart',
+      },
+      
+    },
+  };
   return (<>
     
-          <Bar width={60} height={20} options={options} data={data} />
+          <Bar width={60} height={20} options={options} data={data}  />
           <br></br>
           <Bar width={60} height={20} options={options} data={data2} />
   </>)

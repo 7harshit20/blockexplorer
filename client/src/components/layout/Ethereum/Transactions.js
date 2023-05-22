@@ -33,7 +33,7 @@ const Transactions = () => {
         const s = queryParams.get("s");
         const response = await axios.get(
           `https://api.blockchair.com/ethereum/transactions?key=${
-            process.env.REACT_APP_BLOCKCHAIR_API_KEY
+            `A___ldisHyqV8cgPcRO3NsDWIVCv3JQ5`
           }&offset=${currentPage * itemsPerPage}&limit=${itemsPerPage}${
             q ? `&q=${q}` : ""
           }${s ? `&s=${s}` : ""}`
