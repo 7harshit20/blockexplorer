@@ -1,0 +1,3 @@
+{
+  "dbConnectionString": "postgres://postgres:harshit@localhost:5432/crypto-analysis"
+}
