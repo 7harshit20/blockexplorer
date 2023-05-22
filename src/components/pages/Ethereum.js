@@ -33,7 +33,7 @@ const Ethereum = () => {
             <input
               class='form-control border-end-0 border rounded-pill'
               type='search'
-              placeholder='Search by transaction hash, block hash, address, or block height'
+              placeholder='Search by transaction hash, address, or block height'
               id='example-search-input'
               onChange={(e) => setSearch(e.target.value)}
             />
