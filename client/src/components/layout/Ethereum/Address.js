@@ -17,11 +17,13 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { red } from "@mui/material/colors";
 
 const Address = () => {
   const [data, setData] = useState(null);
   const [rows, setRows] = useState([]);
   const [err, setErr] = useState("");
+  const [suspect, setSuspect] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   // const location = useLocation();
 
@@ -53,7 +55,21 @@ const Address = () => {
         setErr(error.message);
       }
     };
+
+    const checkAddress = async (address) => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/ethereum/check/${address}`
+        );
+        if (response.data.length != 0) setSuspect(response.data[0]);
+        console.log("check", response.data[0]);
+      } catch (error) {
+        console.log(error);
+        setErr(error.message);
+      }
+    };
     fetchData(address);
+    checkAddress(address);
   }, [currentPage]);
 
   useEffect(() => {
@@ -87,6 +103,30 @@ const Address = () => {
             <div class='large mt-5 mb-2 fw-light'>Address Info</div>
             <Box sx={{ display: "flex", flexWrap: "wrap" }}>
               <div>
+                {suspect ? (
+                  <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
+                    <InputLabel
+                      htmlFor='filled-adornment-amount'
+                      style={{ color: "red" }}
+                    >
+                      Malicious
+                    </InputLabel>
+                    <FilledInput
+                      disabled
+                      id='filled-adornment-amount'
+                      startAdornment={
+                        <InputAdornment
+                          position='start'
+                          style={{ color: "red" }}
+                        >
+                          This address is identitified to be associated with{" "}
+                          {suspect.category} from the source {suspect.source}
+                        </InputAdornment>
+                      }
+                    />
+                  </FormControl>
+                ) : null}
+
                 <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
                   <InputLabel htmlFor='filled-adornment-amount'>
                     Address
