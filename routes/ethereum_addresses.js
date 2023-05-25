@@ -25,4 +25,12 @@ router.get("/check/:id", async (req, res) => {
   }
 });
 
+// router.get('/updateGraph', async (req, res) => {
+//   try {
+//     const {rows}= await db.query()
+//   } catch (error) {
+
+//   }
+// });
+
 module.exports = router;
