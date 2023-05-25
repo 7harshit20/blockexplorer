@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect,useState } from 'react';
+import { useEffect,useState,useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -30,15 +30,22 @@ ChartJS.register(
 export function VisualizationBitcoin() {
   const [transactionCount,setTransactionCount]=useState([])
   const[labels,setLabels]=useState([])
+  const [date,setDate]=useState('')
   const [transactionSum,setTransactionSum]=useState([])
   const navigate=useNavigate()
+
+  const dateInputRef = useRef(null);
+
+  const handleChange = (e) => {
+    setDate(e.target.value);
+  };
   function createData(data) {
     return data ;
   }
   useEffect(()=>{
     async function getData(){
         const res=await axios.get(`
-            https://api.blockchair.com/bitcoin/transactions?a=date,count()&q=time(2023-05-08..)`
+            https://api.blockchair.com/bitcoin/transactions?a=date,count()&q=time(${date}..)`
         )
         console.log(res)
         setTransactionCount(res.data.data.map((count)=>{
@@ -50,21 +57,14 @@ export function VisualizationBitcoin() {
         }))
 
     }
-    getData()
-  },[])
+    if(date!==''&&date.length===10){getData()}
+  },[date])
 
   useEffect(()=>{
-    const date = new Date();
-
-   let day = date.getDate();
-   let month = date.getMonth() + 1;
-   let year = date.getFullYear();
-
-// This arrangement can be altered based on how we want the date's format to appear.
-    let currentDate = `${year}-${month}-${day}`;
+    
     async function getData(){
         const res=await axios.get(`
-           https://api.blockchair.com/bitcoin/transactions?a=date,sum(output_total_usd)&q=time(2023-05-08..)`
+           https://api.blockchair.com/bitcoin/transactions?a=date,sum(output_total_usd)&q=time(${date}..)`
         )
         console.log(res)
         setTransactionSum(res.data.data.map((count)=>{
@@ -76,8 +76,8 @@ export function VisualizationBitcoin() {
         }))
 
     }
-    getData()
-  },[])  
+    if(date!==''&&date.length===10){getData()}
+  },[date])  
   // console.log(transactionCount)
   // console.log(transactionSum)
   const data={
@@ -129,9 +129,19 @@ export function VisualizationBitcoin() {
     },
   };
   return (<>
-    
+          <div>
+      <input
+        type="date"
+        onChange={handleChange}
+        ref={dateInputRef}
+      />
+      <p>Selected  Date {date}</p>
+    </div>
+     {date!==''&&(<>
           <Bar width={60} height={20} options={options} data={data}  />
           <br></br>
           <Bar width={60} height={20} options={options} data={data2} />
+     </>)
+       }
   </>)
 }
