@@ -39,7 +39,7 @@ const App = () => {
             <Route path=':blockId' element={<Block />} />
           </Route>
           <Route path='address/:address' element={<Address />} />
-          <Route path='charts' element={<Charts />} />
+          <Route path='graphs' element={<Charts />} />
         </Route>
         <Route path='/bitcoin' element={<Bitcoin />} />
         <Route
@@ -58,11 +58,11 @@ const App = () => {
         <Route path='/bitcoin/transactions' element={<AllTransactions />} />
         <Route
           path='/bitcoin/visualization'
-          element={<VisualizationBitcoin/>}
+          element={<VisualizationBitcoin />}
         />
-         <Route
+        <Route
           path='/bitcoin/visualization/:day'
-          element={<VisualizationBitcoinDay/>}
+          element={<VisualizationBitcoinDay />}
         />
         {/* <Route path='/bitcoin' element={<Ethereum />} /> */}
       </Routes>
