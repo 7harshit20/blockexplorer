@@ -16,8 +16,10 @@ import Blocks from "./components/layout/Ethereum/Blocks";
 import AllBlocks from "./components/layout/Bitcoin/AllBlocks";
 import AllTransactions from "./components/layout/Bitcoin/AllTransactions";
 import { VisualizationBitcoin } from "./components/layout/Bitcoin/VisualizationBitcoin";
-import Charts from "./components/layout/Ethereum/Charts";
+import Graphs from "./components/layout/Ethereum/Graphs";
 import VisualizationBitcoinDay from "./components/layout/Bitcoin/VisualizationBitcoinDay";
+import ReceiverGraph from "./components/layout/Ethereum/ReceiverGraph";
+import SenderGraph from "./components/layout/Ethereum/SenderGraph";
 // import Search from "./components/layout/Search";
 
 // import TextField from "@mui/material/TextField";
@@ -39,7 +41,11 @@ const App = () => {
             <Route path=':blockId' element={<Block />} />
           </Route>
           <Route path='address/:address' element={<Address />} />
-          <Route path='graphs' element={<Charts />} />
+          <Route path='graphs'>
+            <Route path='' element={<Graphs />} />
+            <Route path='receiver/:address' element={<ReceiverGraph />} />
+            <Route path='sender/:address' element={<SenderGraph />} />
+          </Route>
         </Route>
         <Route path='/bitcoin' element={<Bitcoin />} />
         <Route
