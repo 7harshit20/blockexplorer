@@ -1,3 +1,4 @@
+
 const express = require("express");
 const cors = require("cors");
 
@@ -9,5 +10,6 @@ app.use(express.json({ extended: false }));
 app.use(cors());
 
 app.use("/api/ethereum", require("./routes/ethereum_addresses"));
+app.use("/api/bitcoin", require("./routes/bitcoin_addresses"));
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

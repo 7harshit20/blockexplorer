@@ -1,7 +1,7 @@
 import axios from 'axios';
 import react from 'react';
 import { useEffect,useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams,useNavigate } from 'react-router-dom';
 
 import {
     Chart as ChartJS,
@@ -26,8 +26,9 @@ import {
 function VisualizationBitcoinDay()
 {
    const path=useParams()
+   const navigate=useNavigate()
    console.log(path.day)
-   const api_key_ct = 'A___ldisHyqV8cgPcRO3NsDWIVCv3JQ5';
+   const api_key_ct = 'G___SibJaTwQhtdvqyJAIB645NMQNA23';
    const[transactions,setTransactions]=useState([])
    const[transactionCount,setTransactionCount]=useState([])
    useEffect(()=>{
@@ -165,6 +166,32 @@ function VisualizationBitcoinDay()
   }
 
   const options = {
+    onClick: (event, elements) => {
+      console.log(event)
+      console.log(elements)
+      const index=elements[0].index;
+      console.log(index);
+      let hour=""
+      if(labels[index]<=9)
+      {
+        hour='0'+labels[index]
+      }
+      else
+      {
+        hour=`${labels[index]}`
+      }
+      let start=`${path.day}`+' '+hour+':'+'00'+':'+'00'+'..'
+      let end=`${path.day}`+' '+hour+':'+'59'+':'+'59'
+      console.log(start)
+      console.log(end);
+      navigate(`/bitcoin/transactions?q=time(${start}${end})&key=${api_key_ct}`)
+      // const chart = elements[0]._chart;
+      // const element = chart.getElementAtEvent(event)[0];
+      // const dataset = chart.data.datasets[element._datasetIndex];
+      // const xLabel = chart.data.labels[element._index];
+      // const value = dataset.data[element._index];
+      // console.log(dataset.label + " at " + xLabel + ": " + value);
+    },
     responsive: true,
     plugins: {
       legend: {

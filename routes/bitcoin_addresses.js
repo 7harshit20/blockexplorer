@@ -4,7 +4,7 @@ const db = require("../config/db");
 
 router.get("/addresses", async (req, res) => {
   try {
-    const { rows } = await db.query("SELECT * FROM address");
+    const { rows } = await db.query("SELECT * FROM addresses");
     res.status(200).send(rows);
   } catch (error) {
     console.log(error);
@@ -12,19 +12,20 @@ router.get("/addresses", async (req, res) => {
   }
 });
 
-// router.get("/check", async (req, res) => {
-//   console.log(req.query.id);
-//   try {
-//     // console.log(req.params.id);
-//     // const { rows } = await db.query(
-//     //   "SELECT * FROM address WHERE address = $1;",
-//     //   [req.params.id]
-//     // );
-//     // res.status(200).send(rows);
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).send("Server error");
-//   }
-// });
+router.get("/check:id", async (req, res) => {
+  //console.log(req.query.id);
+  try {
+    const id=(req.params.id);
+    const checkId=id.slice(1)
+    const { rows } = await db.query(
+      "SELECT * FROM addresses WHERE address = $1;",
+      [checkId]
+    );
+    res.status(200).send(rows);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Server error");
+  }
+});
 
 module.exports = router;

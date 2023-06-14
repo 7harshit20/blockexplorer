@@ -17,11 +17,13 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import {Link} from 'react-router-dom';
 import SearchBar from "./SearchBar";
+import axios from 'axios'
 
 function AddressDetailsBitcoin() {
   const [data, setData] = useState(null);
   const [offset,setOffset]=useState(0)
   const [rows, setRows] = useState([]);
+  const [suspect,setSuspect]=useState(false)
 
   const { address } = useParams();
 
@@ -43,7 +45,22 @@ function AddressDetailsBitcoin() {
       // console.log("res", res, "address", address);
       // console.log(res[address.toLocaleLowerCase()]);
     };
+
+    const checkAddress=async(address)=>{
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/bitcoin/check:${address}`
+        );
+        if (response.data.length != 0) setSuspect(response.data[0]);
+        console.log("check", response.data[0]);
+      } catch (error) {
+        console.log(error);
+        //setErr(error.message);
+      }
+    };
+    
     fetchData();
+    checkAddress(address)
   }, []);
 
   useEffect(() => {
@@ -74,6 +91,29 @@ function AddressDetailsBitcoin() {
           <div class='row'>
             <Box sx={{ display: "flex", flexWrap: "wrap" }}>
               <div>
+              {suspect ? (
+                  <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
+                    <InputLabel
+                      htmlFor='filled-adornment-amount'
+                      style={{ color: "red" }}
+                    >
+                      Malicious
+                    </InputLabel>
+                    <FilledInput
+                      disabled
+                      id='filled-adornment-amount'
+                      startAdornment={
+                        <InputAdornment
+                          position='start'
+                          style={{ color: "red" }}
+                        >
+                          This address is identitified to be associated with{" "}
+                          {suspect.category} from the source {suspect.src}
+                        </InputAdornment>
+                      }
+                    />
+                  </FormControl>
+                ) : null}
                 <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
                   <InputLabel htmlFor='filled-adornment-amount'>
                     Address
@@ -244,7 +284,7 @@ function AddressDetailsBitcoin() {
               </Table>
             </TableContainer>
             <ReactPaginate
-             pageCount={10}
+             pageCount={data.length/5}
              pageRangeDisplayed={3}
              marginPagesDisplayed={2}
              onPageChange={handlePageClick}

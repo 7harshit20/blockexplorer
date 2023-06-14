@@ -21,6 +21,7 @@ function SearchBar()
         navigate(`/bitcoin/block/${search}`);
     }
     if (addressregex.test(search)) {
+       console.log("e")
         navigate(`/bitcoin/address/${search}`);
     }
    }
