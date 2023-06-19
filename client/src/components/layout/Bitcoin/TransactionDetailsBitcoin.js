@@ -61,6 +61,21 @@ function TransactionDetailsBitcoin()
 
                 <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
                   <InputLabel htmlFor='filled-adornment-amount'>
+                    TransactionHash
+                  </InputLabel>
+                  <FilledInput
+                    disabled
+                    id='filled-adornment-amount'
+                    startAdornment={
+                      <InputAdornment position='start'>
+                        <Link to={`/bitcoin/flow/${pp}`}>{pp}</Link>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+
+                <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
+                  <InputLabel htmlFor='filled-adornment-amount'>
                     Amount Transacted
                   </InputLabel>
                   <FilledInput
