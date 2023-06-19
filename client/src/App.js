@@ -20,6 +20,7 @@ import Graphs from "./components/layout/Ethereum/Graphs";
 import VisualizationBitcoinDay from "./components/layout/Bitcoin/VisualizationBitcoinDay";
 import ReceiverGraph from "./components/layout/Ethereum/ReceiverGraph";
 import SenderGraph from "./components/layout/Ethereum/SenderGraph";
+import BitcoinFlow from "./components/layout/Bitcoin/BitcoinFLow";
 // import Search from "./components/layout/Search";
 
 // import TextField from "@mui/material/TextField";
@@ -69,6 +70,11 @@ const App = () => {
         <Route
           path='/bitcoin/visualization/:day'
           element={<VisualizationBitcoinDay />}
+        />
+
+        <Route
+          path='/bitcoin/flow/:transaction'
+          element={<BitcoinFlow/>}
         />
         {/* <Route path='/bitcoin' element={<Ethereum />} /> */}
       </Routes>

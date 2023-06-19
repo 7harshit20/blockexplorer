@@ -7,7 +7,7 @@ import BitcoinFlow from "../layout/Bitcoin/BitcoinFLow";
 function Home() {
   return (
     <>
-      <BitcoinFlow/>
+     
     </>
   );
 }
