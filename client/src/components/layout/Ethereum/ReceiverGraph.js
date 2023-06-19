@@ -120,7 +120,7 @@ const GraphComponent = () => {
   const addTxsOnClick = () => {
     cyRef.current.on("click", "node", (event) => {
       console.log("id of clicked node", event.target.id());
-      navigator.clipboard.writeText(event.target.id());
+      // navigator.clipboard.writeText(event.target.id());
       setLoading(true);
       const newTxs = axios
         .get(
@@ -143,7 +143,7 @@ const GraphComponent = () => {
   const handleClickOnEdge = () => {
     cyRef.current.on("click", "edge", (event) => {
       console.log("id of clicked edge", event.target.id());
-      navigator.clipboard.writeText(event.target.id());
+      // navigator.clipboard.writeText(event.target.id());
     });
   };
 
