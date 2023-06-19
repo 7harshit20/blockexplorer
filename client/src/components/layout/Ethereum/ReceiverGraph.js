@@ -2,17 +2,23 @@ import React, { useEffect, useRef, useState } from "react";
 import cytoscape from "cytoscape";
 import axios from "axios";
 import coseBilkent from "cytoscape-cose-bilkent";
+import { useParams, useLocation } from "react-router-dom";
 
 cytoscape.use(coseBilkent);
 
 const GraphComponent = () => {
+  const { address } = useParams();
   const containerRef = useRef(null);
   const cyRef = useRef(null);
   const [txs, setTxs] = useState([]);
   const [loading, setLoading] = useState(false);
+  const location = useLocation();
   const fetchGraphData = async () => {
+    const queryParams = new URLSearchParams(location.search);
+    const q = queryParams.get("q");
+    const s = queryParams.get("s");
     const res = await axios.get(
-      `https://api.blockchair.com/ethereum/transactions?q=recipient(0x4e7b110335511f662fdbb01bf958a7844118c0d4)&s=value_usd(desc)&limit=20`
+      `https://api.blockchair.com/ethereum/transactions?q=value_usd(1000000..),time(2023-05-28)&s=time(asc)&limit=100`
     );
     console.log(res.data.data);
     setTxs(res.data.data);
@@ -24,7 +30,9 @@ const GraphComponent = () => {
     txs.forEach((tx) => {
       nodes.push({ data: { id: tx.sender } });
     });
-    nodes.push({ data: { id: txs[0].recipient } });
+    txs.forEach((tx) => {
+      nodes.push({ data: { id: tx.recipient } });
+    });
     return nodes;
   };
   const initialiseEdges = (txs) => {
@@ -38,6 +46,7 @@ const GraphComponent = () => {
           source: tx.sender,
           target: tx.recipient,
           weight: tx.value_usd,
+          time: tx.time,
         },
       });
     });
@@ -95,7 +104,9 @@ const GraphComponent = () => {
         "label",
         `${edge.id().substring(0, 5)}...${edge
           .id()
-          .substring(edge.id().length - 3)}, $${edge.data("weight")}`
+          .substring(edge.id().length - 3)}, $${edge.data(
+          "weight"
+        )}, ${edge.data("time")}`
       ); // Show the label on hovering
       edge.style("text-opacity", 1);
     });
@@ -109,7 +120,7 @@ const GraphComponent = () => {
   const addTxsOnClick = () => {
     cyRef.current.on("click", "node", (event) => {
       console.log("id of clicked node", event.target.id());
-      // navigator.clipboard.writeText(event.target.id());
+      navigator.clipboard.writeText(event.target.id());
       setLoading(true);
       const newTxs = axios
         .get(
@@ -132,7 +143,7 @@ const GraphComponent = () => {
   const handleClickOnEdge = () => {
     cyRef.current.on("click", "edge", (event) => {
       console.log("id of clicked edge", event.target.id());
-      // navigator.clipboard.writeText(event.target.id());
+      navigator.clipboard.writeText(event.target.id());
     });
   };
 
@@ -142,6 +153,8 @@ const GraphComponent = () => {
 
   useEffect(() => {
     initialiseGraph();
+    const layout = cyRef.current.layout({ name: "cose-bilkent" });
+    layout.run();
     // cyRef.current.on("dblclick", "node", addTxsOnClick);
     addTxsOnClick();
     handleClickOnEdge();
@@ -177,7 +190,7 @@ const GraphComponent = () => {
   return (
     <div>
       {loading ? <div>Loading...</div> : null}
-      <div ref={containerRef} style={{ height: "800px" }} />
+      <div ref={containerRef} style={{ height: "1000px" }} />
       <button onClick={resetZoom}>Reset Zoom</button>
     </div>
   );
