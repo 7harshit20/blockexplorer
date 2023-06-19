@@ -18,6 +18,7 @@ import AllTransactions from "./components/layout/Bitcoin/AllTransactions";
 import { VisualizationBitcoin } from "./components/layout/Bitcoin/VisualizationBitcoin";
 import Charts from "./components/layout/Ethereum/Charts";
 import VisualizationBitcoinDay from "./components/layout/Bitcoin/VisualizationBitcoinDay";
+import BitcoinFlow from "./components/layout/Bitcoin/BitcoinFLow";
 // import Search from "./components/layout/Search";
 
 // import TextField from "@mui/material/TextField";
@@ -63,6 +64,11 @@ const App = () => {
         <Route
           path='/bitcoin/visualization/:day'
           element={<VisualizationBitcoinDay />}
+        />
+
+        <Route
+          path='/bitcoin/flow/:transaction'
+          element={<BitcoinFlow/>}
         />
         {/* <Route path='/bitcoin' element={<Ethereum />} /> */}
       </Routes>

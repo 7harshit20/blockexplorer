@@ -1,19 +1,18 @@
-import ReactFlow, { Controls, Background,applyNodeChanges,applyEdgeChanges,ConnectionLineType,
-  Panel,Handle,
-  useNodesState,
-  useEdgesState, } from 'reactflow';
+import ReactFlow, { Controls, Background,applyNodeChanges,applyEdgeChanges,ConnectionLineType, Panel } from 'reactflow';
 import 'reactflow/dist/style.css';
 import {useState,useCallback,useEffect} from 'react';
+import { useParams } from 'react-router-dom';
 import { searchTransactions } from '../../../apis/bitcoin';
 import dagre from 'dagre'
+
 
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
 
-const nodeWidth = 10;
+const nodeWidth = 60;
 const nodeHeight = 16;
 
-const getLayoutedElements = (nodes, edges, direction = 'TB') => {
+const getLayoutedElements = (nodes, edges, direction = 'LR') => {
   const isHorizontal = direction === 'LR';
   dagreGraph.setGraph({ rankdir: direction });
 
@@ -54,18 +53,20 @@ function BitcoinFlow() {
     const [nodes,setNodes]=useState([])
     const[edges,setEdges]=useState([]);
     const[hoveredNode,setHoveredNode]=useState(null)
+    const {transaction}=useParams()
+    console.log(transaction)
     const [hoveredEdge,setHoveredEdge]=useState(null)
     useEffect(()=>{
       async function fetch()
       {
-          const res=await searchTransactions('61496f70f57cc826af8aa7c22c546029242fd24f3269d9683815f3bc1bd66a25')
+          const res=await searchTransactions(transaction)
           const intitalNodes=[
             {
-            id:'61496f70f57cc826af8aa7c22c546029242fd24f3269d9683815f3bc1bd66a25',
+            id:transaction,
             elementType:"node",
             position:{x:500,y:500},
-            data:{hash:'61496f70f57cc826af8aa7c22c546029242fd24f3269d9683815f3bc1bd66a25'},
-            style:{backgroundColor:'blue',width:"2%"},
+            data:{hash:transaction},
+            style:{backgroundColor:'blue',width:"2%",borderRadius:'50%'},
             
             }
             ]
@@ -76,16 +77,17 @@ function BitcoinFlow() {
                 elementType:"node",
                 position:{x:Math.floor(Math.random() * 800),y:Math.floor(Math.random() * 500)},
                 data:{hash:input.transaction_hash},
-                style:{backgroundColor:'white',width:'2%'}
+                style:{backgroundColor:'white',width:'2%',borderRadius:'50%'}
               })
 
               initialEdges.push({
-                id:`61496f70f57cc826af8aa7c22c546029242fd24f3269d9683815f3bc1bd66a25-${input.transaction_hash}`,
+                id:`${transaction}-${input.transaction_hash}-${Math.random()}`,
                 source:input.transaction_hash,
-                target:'61496f70f57cc826af8aa7c22c546029242fd24f3269d9683815f3bc1bd66a25',
-                style:{arrowHeadType:'arrow'},
-        
-                type: 'smoothstep', animated: true
+                target:transaction,
+                style:{strokeWidth:Math.min(10,Math.max(input.value/1e9,1)),arrowHeadType:'arrow'},
+                animated:true,
+                data:input.recipient,
+              
               })
             })
 
@@ -96,35 +98,38 @@ function BitcoinFlow() {
                 elementType:"node",
                 position:{x:Math.floor(Math.random() * 800),y:Math.floor(Math.random() * 500)},
                 data:{hash:output.spending_transaction_hash},
-                style:{backgroundColor:'white',width:'2%'}
+                style:{backgroundColor:'white',width:'2%',borderRadius:'50%'}
               })
 
               initialEdges.push({
-                id:`${output.spending_transaction_hash}-61496f70f57cc826af8aa7c22c546029242fd24f3269d9683815f3bc1bd66a25`,
+                id:`${output.spending_transaction_hash}-${transaction}-${Math.random()}`,
                 target:output.spending_transaction_hash,
-                source:'61496f70f57cc826af8aa7c22c546029242fd24f3269d9683815f3bc1bd66a25',
-                style:{arrowHeadType:'arrow'},
-            
+                source:transaction,
+                style:{strokeWidth:Math.min(10,Math.max(output.value/1e9,1)),arrowHeadType:'arrow'},
+
+                data:output.recipient,
                 type:  'smoothstep', animated: true
               })
             }
 
             else{
-              const ID=Date.now().toString();
+              
+              let ID=Date.now().toString()+Math.random();
+              console.log(ID)
               intitalNodes.push({
                 id:ID,
                 elementType:"node",
                 position:{x:Math.floor(Math.random() * 800),y:Math.floor(Math.random() * 500)},
                 data:{hash:ID},
-                style:{backgroundColor:'black',width:"2%"}
+                style:{backgroundColor:'black',width:"2%",borderRadius:'50%'}
               })
 
               initialEdges.push({
-                id:`${ID}-61496f70f57cc826af8aa7c22c546029242fd24f3269d9683815f3bc1bd66a25`,
+                id:`${ID}-${transaction}`,
                 target:ID,
-                source:'61496f70f57cc826af8aa7c22c546029242fd24f3269d9683815f3bc1bd66a25',
+                source:transaction,
                 style:{arrowHeadType:'arrow'},
-             
+           
                 type:  'smoothstep', animated: true
               })
             }
@@ -163,79 +168,98 @@ function BitcoinFlow() {
   }
   const onNodeClick=(async (event,node)=>{
     //const { offsetX, offsetY } = event;
+    if(node.style.backgroundColor!=='blue'){
     console.log(nodes)
   console.log(edges)
     const initialNodes=[...nodes]
     const initialEdges=[...edges]
     
-    console.log(initialNodes)
-    console.log("A")
-    console.log(initialEdges)
+    // console.log(initialNodes)
+    // console.log("A")
+    // console.log(initialEdges)
     let obj=nodes.find((n,i)=>{
       if(nodes[i].id===node.id)
       {
-       nodes[i].style={backgroundColor:'blue',width:"2%"}
+       nodes[i].style={backgroundColor:'blue',width:"2%",borderRadius:'50%'}
        return true;
       }
     })
     const res=await searchTransactions(node.id);
-
+    
     res.inputs.map((input)=>{
-
+      
       if(NodeisPresent(input.transaction_hash)===false){
+        console.log("AA")
       initialNodes.push({
         id:input.transaction_hash,
         elementType:"node",
         position:{x:Math.floor(Math.random() * 800),y:Math.floor(Math.random() * 500)},
-        data:{hash:input.transaction_hash},
-        style:{width:"2%"}
+        data:{hash:input.transaction_hash,},
+        style:{width:"2%",borderRadius:'50%'}
       })
 
       initialEdges.push({
-        id:`${node.id}-${input.transaction_hash}`,
+        id:`${node.id}-${input.transaction_hash}-${Date.now().toString()}-${Math.random()}`,
         source:input.transaction_hash,
         target:node.id,
-        style:{arrowHeadType:'arrow'},
-    
+        style:{strokeWidth:Math.min(10,Math.max(input.value/1e9,1)),arrowHeadType:'arrow'},
+        
+        data:input.recipient,
         type:  'smoothstep', animated: true
       })
 
       }
-      else
-      {
-        console.log(true);
-      }
+      
     })
 
     res.outputs.map((output)=>{
-      if(NodeisPresent(output.transaction_hash)===false){
-      if(output.is_spent===true) {
+      console.log("Y")
+      if(output.is_spent===true){
+        console.log("BB");
+      if(NodeisPresent(output.spending_transaction_hash)===false) {
       initialNodes.push({
         id:output.spending_transaction_hash,
         elementType:"node",
         position:{x:Math.floor(Math.random() * 800),y:Math.floor(Math.random() * 500)},
         data:{hash:output.spending_transaction_hash},
-        style:{width:"2%"}
+        style:{width:"2%",borderRadius:'50%'}
       })
 
       initialEdges.push({
-        id:`${output.spending_transaction_hash}-${node.id}`,
+        id:`${output.spending_transaction_hash}-${node.id}-${Date.now().toString()}-${Math.random()}`,
         target:output.spending_transaction_hash,
         source:node.id,
-        style:{arrowHeadType:'arrow'},
+        style:{strokeWidth:Math.min(10,Math.max(output.value/1e9,1)),arrowHeadType:'arrow'},
         
+        data:output.recipient,
         type:  'smoothstep', animated: true
       })
     }
 
     else{
-      const ID=Date.now().toString();
+      
+      console.log("X")
+      initialEdges.push({
+        id:`${output.spending_transaction_hash}-${node.id}-${Date.now().toString()}-${Math.random()}`,
+        target:output.spending_transaction_hash,
+        source:node.id,
+        style:{strokeWidth:Math.min(10,Math.max(output.value/1e9,1)),arrowHeadType:'arrow'},
+        
+        data:output.recipient,
+        type:  'smoothstep', animated: true
+      })
+    }
+    }
+    else
+    {
+      let ID=Date.now().toString()+Math.random();
+      console.log(ID)
       initialNodes.push({
         id:ID,
         elementType:"node",
         position:{x:Math.floor(Math.random() * 800),y:Math.floor(Math.random() * 500)},
         data:{hash:ID},
-        style:{backgroundColor:'black',width:"2%"}
+        style:{backgroundColor:'black',width:"2%",borderRadius:'50%'}
       })
 
       initialEdges.push({
@@ -245,11 +269,6 @@ function BitcoinFlow() {
         style:{arrowHeadType:'arrow'},
     
       })
-    }
-    }
-    else
-    {
-      console.log("AA")
     }
 
     
@@ -261,22 +280,23 @@ function BitcoinFlow() {
     );
     setNodes(layoutedNodes)
     setEdges(layoutedEdges)
+    }
    
 })
 
-// const onLayout = useCallback(
-//   (direction) => {
-//     const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
-//       nodes,
-//       edges,
-//       direction
-//     );
+const onLayout = useCallback(
+  (direction) => {
+    const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
+      nodes,
+      edges,
+      direction
+    );
 
-//     setNodes([...layoutedNodes]);
-//     setEdges([...layoutedEdges]);
-//   },
-//   [nodes, edges]
-// );
+    setNodes([...layoutedNodes]);
+    setEdges([...layoutedEdges]);
+  },
+  [nodes, edges]
+);
   const onNodeMouseEnter=(event,node)=>{
     setHoveredNode(node)
   }
@@ -287,6 +307,8 @@ function BitcoinFlow() {
 
   
   return (<>
+  
+   
     {hoveredNode && (
       <div style={{position:"left"}}>
         <h6>TransactionHash: {hoveredNode.data.hash}</h6>
@@ -294,22 +316,17 @@ function BitcoinFlow() {
         {/* Render additional data for the hovered node */}
       </div>
     )}
-
-{hoveredEdge && (
-      <div style={{position:"right"}}>
-        <h6>TransactionHash: {hoveredEdge.id}</h6>
-      
-        {/* Render additional data for the hovered node */}
-      </div>
-    )} 
-    <div style={{ height: '1000px',width:'100%' }}>
+    <br></br>  <div style={{ height: '1000px',width:'100%' }}>
       <ReactFlow nodes={nodes} edges={edges} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange}  onNodeClick={onNodeClick} connectionLineType={ConnectionLineType.SmoothStep}
       fitView onNodeMouseEnter={onNodeMouseEnter} >
         <Background />
         <Controls />
-        <Panel position="top-right">
        
+        <Panel position="top-right">
+        <button onClick={() => onLayout('TB')}>vertical layout</button>
+        <button onClick={() => onLayout('LR')}>horizontal layout</button>
       </Panel>
+    
       </ReactFlow>
       
     </div></>
