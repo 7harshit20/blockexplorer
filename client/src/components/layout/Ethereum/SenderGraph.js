@@ -17,10 +17,15 @@ const GraphComponent = () => {
     const queryParams = new URLSearchParams(location.search);
     const q = queryParams.get("q");
     const s = queryParams.get("s");
+    // const res = await axios.get(
+    //   `https://api.blockchair.com/ethereum/transactions?q=value_usd(1000000..),time(2020-05-20..)&s=time(asc)&limit=100`
+    // );
     const res = await axios.get(
-      `https://api.blockchair.com/ethereum/transactions?q=value_usd(1000000..),time(2020-05-20..)&s=time(asc)&limit=100`
+      `https://api.blockchair.com/ethereum/transactions?key=${
+        process.env.REACT_APP_BLOCKCHAIR_API_KEY
+      }&limit=100${q ? `&q=${q}` : ""}${s ? `&s=${s}` : ""}`
     );
-    console.log(res.data.data);
+    console.log("res", res.data);
     setTxs(res.data.data);
   };
 
@@ -205,7 +210,7 @@ const GraphComponent = () => {
       setLoading(true);
       const newTxs = axios
         .get(
-          `https://api.blockchair.com/ethereum/transactions?q=sender(${event.target.id()})&limit=100`
+          `https://api.blockchair.com/ethereum/transactions?q=sender(${event.target.id()})&limit=20&sort=value_usd(desc)`
         )
         .then((res) => {
           console.log(res.data.data);

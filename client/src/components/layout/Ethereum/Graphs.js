@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 
 const Graphs = () => {
-  const [address, setAddress] = useState("0x" + "0".repeat(40));
+  const [address, setAddress] = useState("");
   const navigate = useNavigate();
 
   const onReceiverSubmit = (e) => {
